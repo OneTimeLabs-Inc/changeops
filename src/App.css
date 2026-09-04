@@ -116,7 +116,7 @@
    APPROVALS / CALENDAR / AUDIT 006
    ========================================================== */
 
-.approval-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.approval-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
 .approval-card { padding: 14px; background: white; border: 1px solid var(--line); border-radius: 8px; }.approval-card-top { display: flex; align-items: center; justify-content: space-between; color: #88949f; font-size: 8px; }.approval-title { display: block; margin: 11px 0 5px; padding: 0; color: #26333e; background: transparent; border: 0; font-size: 13px; font-weight: 750; text-align: left; }.approval-card > p { min-height: 34px; margin: 0; color: #6f7b86; font-size: 9px; line-height: 1.55; }.approval-meta { margin-top: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }.approval-meta span { padding: 8px; background: #f8fafb; border: 1px solid #edf0f2; border-radius: 5px; color: #46535f; font-size: 8px; }.approval-meta small { display: block; margin-bottom: 3px; color: #929ca5; font-size: 7px; text-transform: uppercase; }.approval-card footer { margin-top: 12px; display: flex; justify-content: flex-end; gap: 7px; }
 .empty-state { grid-column: 1 / -1; padding: 50px; text-align: center; color: #84909b; background: white; border: 1px dashed #cdd5dc; border-radius: 8px; }.empty-state h3 { margin: 10px 0 4px; color: #4e5b67; font-size: 13px; }.empty-state p { margin: 0; font-size: 9px; }
 .month-label { min-height: 32px; padding: 0 10px; display: flex; align-items: center; gap: 7px; background: white; border: 1px solid var(--line); border-radius: 6px; color: #53616e; font-size: 9px; font-weight: 700; }.calendar-panel { overflow: hidden; }.calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); border-bottom: 1px solid var(--line); background: #fafbfd; }.calendar-weekdays span { padding: 8px; color: #7f8b96; font-size: 7px; font-weight: 800; text-transform: uppercase; }.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }.calendar-cell { min-height: 110px; padding: 7px; border-right: 1px solid #edf0f3; border-bottom: 1px solid #edf0f3; background: white; }.calendar-cell:nth-child(7n) { border-right: 0; }.calendar-cell.today { background: #f8fbff; }.calendar-day { display: inline-grid; width: 20px; height: 20px; place-items: center; color: #6f7d88; font-size: 8px; }.today .calendar-day { color: white; background: var(--blue); border-radius: 50%; }.calendar-events { display: grid; gap: 4px; margin-top: 3px; }.calendar-event { padding: 5px 6px; border: 1px solid #dfe4e8; border-left-width: 3px; border-radius: 4px; background: #fbfcfd; text-align: left; overflow: hidden; }.calendar-event strong, .calendar-event span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }.calendar-event strong { font-size: 7px; }.calendar-event span { margin-top: 2px; color: #697681; font-size: 7px; }.risk-border-low { border-left-color: #2d8a64; }.risk-border-medium { border-left-color: #ca8522; }.risk-border-high { border-left-color: #d16933; }.risk-border-critical { border-left-color: #c24037; }
@@ -201,11 +201,57 @@
   gap: 6px;
 }
 
-.decision-dialog { width: min(520px, calc(100vw - 28px)); }
-.decision-copy { display: flex; gap: 12px; align-items: center; padding: 18px 20px 4px; }
-.decision-copy p { margin: 3px 0 0; color: #687385; font-size: 12px; }
-.decision-comment { display: grid; gap: 7px; padding: 14px 20px; font-size: 12px; font-weight: 600; }
-.decision-comment textarea { resize: vertical; }
+.decision-dialog {
+  width: min(680px, calc(100vw - 40px));
+  max-width: 680px;
+  max-height: calc(100vh - 40px);
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.decision-copy {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 18px 20px 6px;
+  min-width: 0;
+}
+
+.decision-copy > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.decision-copy h2,
+.decision-copy p {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.decision-copy p {
+  margin: 3px 0 0;
+  color: #687385;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.decision-comment {
+  display: grid;
+  gap: 7px;
+  padding: 14px 20px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 0;
+}
+
+.decision-comment textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 110px;
+  box-sizing: border-box;
+  resize: vertical;
+  overflow-x: hidden;
+}
 
 .summary-app {
   min-height: 100vh;
@@ -655,5 +701,55 @@
   .view-as-banner {
     align-items: flex-start;
     padding: 7px 10px;
+  }
+}
+
+
+@media (max-width: 760px) {
+  .decision-dialog {
+    width: calc(100vw - 20px);
+    max-height: calc(100vh - 20px);
+  }
+
+  .decision-copy,
+  .decision-comment {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+
+/* ==========================================================
+   CHANGEOPS 940
+   Approval decision dialog overflow fix
+   ========================================================== */
+.modal-card.decision-dialog {
+  height: auto;
+  max-height: none;
+  overflow: hidden;
+}
+
+.decision-dialog .modal-footer {
+  margin: 0;
+  padding: 10px 20px 14px;
+  flex: 0 0 auto;
+}
+
+.decision-dialog .form-error {
+  margin: 0 20px 12px;
+}
+
+.decision-dialog .decision-comment textarea {
+  display: block;
+  height: 96px;
+  min-height: 96px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+@media (max-width: 760px) {
+  .modal-card.decision-dialog {
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
   }
 }
