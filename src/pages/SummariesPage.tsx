@@ -1,0 +1,7 @@
+import { FileText } from "lucide-react";
+import type { ChangeRequest } from "../types/change";
+
+export default function SummariesPage({ changes, onOpen }: { changes: ChangeRequest[]; onOpen: (change: ChangeRequest) => void }) {
+  const sorted = [...changes].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return <div className="page-stack"><header className="page-heading"><div><p className="eyebrow">CAB RECORD</p><h1>CAB summaries</h1><p>Reference pages for submitted changes, approval history, audit activity, and PDF/DOCX exports.</p></div></header><section className="panel table-panel"><div className="table-wrap"><table className="change-table"><thead><tr><th>Change</th><th>Title</th><th>Requested by</th><th>Risk</th><th>Status</th><th>Created</th><th></th></tr></thead><tbody>{sorted.map((change) => <tr key={change.id}><td><strong>{change.number}</strong><span>{change.type}</span></td><td><strong>{change.title}</strong></td><td>{change.requestedBy}</td><td><span className={`risk-badge risk-${change.risk.toLowerCase()}`}>{change.risk}</span></td><td><span className={`status-badge status-${change.status.toLowerCase().replaceAll(" ", "-")}`}>{change.status}</span></td><td>{new Date(change.createdAt).toLocaleDateString()}</td><td><button className="secondary-button compact-button" onClick={() => onOpen(change)}><FileText size={14}/> Summary</button></td></tr>)}</tbody></table></div></section></div>;
+}
